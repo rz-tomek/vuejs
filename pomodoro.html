@@ -1,0 +1,104 @@
+<html>
+
+<body>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<div id="app">
+  <h1 class="name">{{ name }}</h1>
+
+  <div id="timer">
+    <span class="minutes">{{ minutes }}</span>
+    <span>:</span>
+    <span class="seconds">{{ seconds }}</span>
+  </div>
+
+<p></p>
+
+  <div id="buttons">
+    <button id="start" v-on:click="handleStart">Start</button>
+    <button id="pause" v-on:click="handlePause">Pause</button>
+    <button id="reset" v-on:click="handleReset">Reset</button>
+  </div>
+
+</div>
+
+<script>
+
+new Vue({
+ el: '#app',
+ data: {
+   remainingTime: 60 * 25,
+   timer: null,
+   name: 'Let the countdown begin'
+},
+
+ methods: {
+   handleStart: function () {
+     this.timer = setInterval(() => this.decreaseTimer(), 1000);
+   },
+
+   decreaseTimer: function() {
+     if (this.remainingTime >= 1) {
+       this.remainingTime--;
+     }
+     else {
+       this.remainingTime = 0;
+       this.handlePause();
+       alert("Time is up!");
+     }
+   },
+
+   handlePause: function() {
+     clearInterval(this.timer);
+     this.timer = null;
+   },
+
+   handleReset: function () {
+     this.remainingTime = 60 * 25;
+     clearInterval(this.timer);
+     this.timer = null;
+   }
+
+ },
+
+   computed: {
+     minutes: function() {
+       const minutes = Math.floor(this.remainingTime / 60);
+       if (minutes > 10) return minutes;
+       else return '0' + minutes;
+     },
+
+     seconds: function() {
+       const seconds = this.remainingTime - (this.minutes * 60);
+       if (seconds > 10) return seconds
+       else return '0' + seconds;
+     }
+   }
+})
+
+</script>
+
+<style>
+
+.name {
+  color: green;
+  text-align: center;
+}
+
+#timer {
+  color: red;
+  text-align: center;
+}
+
+#buttons {
+  text-align: center;
+}
+
+
+</style>
+
+
+</body>
+
+</html>
